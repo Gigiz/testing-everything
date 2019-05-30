@@ -1,52 +1,33 @@
 (async () => {
   const { job, start, stop } = require("microjob");
 
-  console.log('Start execution');
+  await start();
 
+  console.log('Start execution');
   const startTime = new Date();
 
-  try {
-    // start the worker pool
-    await start();
-
-    // this function will be executed in another thread
-    const res1 = await job(() => {
+  const res = async (start, end) => {
+    return await job(() => {
       let count = 0;
-      for(let i=0; i < 3333333333; i++) {
+      for(let i=start; i < end; i++) {
         count += i;
       }
-
       return count;
-    });
-
-    const res2 = await job(() => {
-      let count = 0;
-      for(let i=3333333333; i < 6666666666; i++) {
-        count += i;
-      }
-
-      return count;
-    });
-
-    const res3 = await job(() => {
-      let count = 0;
-      for(let i=6666666666; i < 10000000000; i++) {
-        count += i;
-      }
-
-      return count;
-    });
-
-    const count = res1 + res2 + res3;
-
-    const endTime = new Date();
-
-    console.log(`Finish in ${endTime - startTime} ms. Res => ${count}`);
-    
-  } catch (err) {
-    console.error(err);
-  } finally {
-    // shutdown worker pool
-    await stop();
+    },{ ctx: { start, end } });
   }
+  
+  Promise.all([res(0, 3333333333), res(3333333333, 6666666666), res(6666666666, 10000000000)])
+    .then(results => {
+      const count = results[0] + results[1] + results[2];
+
+      const endTime = new Date();
+
+      console.log(`Finish in ${endTime - startTime} ms. Res => ${count}`);
+        
+      stop();
+
+    });
+
+  
+
 })();
