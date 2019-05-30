@@ -1,0 +1,22 @@
+{
+  "name": "testing-microjob",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gigiz/testing-microjob.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gigiz/testing-microjob/issues"
+  },
+  "homepage": "https://github.com/Gigiz/testing-microjob#readme",
+  "dependencies": {
+    "microjob": "^0.5.2"
+  }
+}
