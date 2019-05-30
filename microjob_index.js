@@ -12,7 +12,7 @@
     // this function will be executed in another thread
     const res1 = await job(() => {
       let count = 0;
-      for(let i=0; i < 333333; i++) {
+      for(let i=0; i < 3333333333; i++) {
         count += i;
       }
 
@@ -21,7 +21,7 @@
 
     const res2 = await job(() => {
       let count = 0;
-      for(let i=333333; i < 666666; i++) {
+      for(let i=3333333333; i < 6666666666; i++) {
         count += i;
       }
 
@@ -30,7 +30,7 @@
 
     const res3 = await job(() => {
       let count = 0;
-      for(let i=666666; i < 1000000; i++) {
+      for(let i=6666666666; i < 10000000000; i++) {
         count += i;
       }
 
