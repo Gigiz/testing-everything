@@ -10,11 +10,12 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import * as userService from '@src/services/users/users';
-
+import LaunchScreen from '@src/components/LaunchScreen/LaunchScreen';
 import MainContainer from '@src/components/MainContainer/MainContainer';
 
 const WelcomePage = () => {
   const classes = useStyles();
+  const [isLoading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -22,8 +23,15 @@ const WelcomePage = () => {
   }, []);
 
   const fetchAllUsers = async () => {
+    setLoading(true);
     const users = await userService.fetchUsers();
-    console.log(users);
+    setUsers(users);
+    setLoading(false);
+  };
+
+  const sortAscendingNumberOfComments = async () => {
+    const sortedUserAscending = await userService.sortUsersByCommentsNumberAscending(users);
+    setUsers(sortedUserAscending);
   };
 
   const sortDescendingNumberOfComments = () => {
@@ -35,7 +43,7 @@ const WelcomePage = () => {
     <div>
       <Grid container spacing={2} justify='center'>
         <Grid item>
-          <Button variant='contained' color='primary'>
+          <Button variant='contained' color='primary' onClick={() => sortAscendingNumberOfComments()}>
             Sort Acending Number of Comments
           </Button>
         </Grid>
@@ -47,8 +55,9 @@ const WelcomePage = () => {
       </Grid>
     </div>
     <Container className={classes.cardGrid} maxWidth="md">
-      <Grid container spacing={4}>
-        {users.map((user, index) => (
+      {isLoading && <LaunchScreen />}
+      {!isLoading && <Grid container spacing={4}>
+        {users.slice(0, 20).map((user, index) => (
           <Grid item key={index} xs={12} sm={12} md={12}>
             <Card>
               <CardHeader
@@ -71,7 +80,7 @@ const WelcomePage = () => {
             </Card>
           </Grid>
         ))}
-      </Grid>
+      </Grid>}
     </Container>
   </MainContainer>
 };
