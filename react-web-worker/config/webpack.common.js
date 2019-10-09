@@ -14,6 +14,13 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.worker\.js$/,
+        use: {
+          loader: 'worker-loader',
+          options: { inline: true },
+        },
+      },
+      {
         test: /\.(js|jsx)$/,
         exclude: [/node_modules/],
         use: [{ loader: 'babel-loader' }]

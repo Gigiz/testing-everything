@@ -1,55 +1,91 @@
 import React, { useState, useEffect } from 'react';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import CardHeader from '@material-ui/core/CardHeader';
+import Avatar from '@material-ui/core/Avatar';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import { makeStyles } from '@material-ui/core/styles';
+import * as userService from '@src/services/users/users';
 
-const ResultBox = ({ index }) => {
-
-  const [book, setBook] = useState([]);
-
-  useEffect(() => {
-    const fetchBooks = async () => {
-      const response = await fetch('https://fakerestapi.azurewebsites.net/api/Books');
-      const books = await response.json();
-      const book = books.find(book => book.ID === index);
-      setBook(book);
-    };
-
-    fetchBooks();
-  }, [setBook]);
-
-  return <div>
-    {book && <span>{book.Title} - {book.Description}</span>}
-  </div>;
-};
+import MainContainer from '@src/components/MainContainer/MainContainer';
 
 const WelcomePage = () => {
+  const classes = useStyles();
+  const [users, setUsers] = useState([]);
 
-  const [time, setTime] = useState(new Date());
-  const [boxes, setBoxes] = useState([]);
+  useEffect(() => {
+    fetchAllUsers();
+  }, []);
 
-  const updateTime = () => {
-    setTime(new Date());
+  const fetchAllUsers = async () => {
+    const users = await userService.fetchUsers();
+    console.log(users);
   };
 
-  const searchPeople = () => {
-    setBoxes(Array.from(Array(100).keys()));
+  const sortDescendingNumberOfComments = () => {
+    const sortedUserDescending = userService.sortUsersByCommentsNumberDescending(users);
+    setUsers(sortedUserDescending);
   };
 
-  setInterval(updateTime, 1000);
-
-  const h = time.getHours();
-  const m = time.getMinutes();
-  const s = time.getSeconds();
-
-  return <div>
-    <h1>Time: {h}:{m}:{s}</h1>
-
+  return <MainContainer>
     <div>
-      <input type='button' value='Search' onClick={() => searchPeople()} />
+      <Grid container spacing={2} justify='center'>
+        <Grid item>
+          <Button variant='contained' color='primary'>
+            Sort Acending Number of Comments
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button variant='outlined' color='primary' onClick={() => sortDescendingNumberOfComments()}>
+            Sort Descending Number of Comments
+          </Button>
+        </Grid>
+      </Grid>
     </div>
-    <div>Result: </div>
-    <div>
-      {boxes.map(index => <div key={index}><ResultBox index={index} /></div>)}
-    </div>
-  </div>;
+    <Container className={classes.cardGrid} maxWidth="md">
+      <Grid container spacing={4}>
+        {users.map((user, index) => (
+          <Grid item key={index} xs={12} sm={12} md={12}>
+            <Card>
+              <CardHeader
+                avatar={
+                  <Avatar src={user.profilePicture} className={classes.avatar} />
+                }
+                title={user.name}
+                subheader={user.registrationDate.toString()}
+              />
+              <CardContent className={classes.cardContent}>
+                <Typography>
+                  {user.profileDescription}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size='small' color='primary'>
+                  {user.commentsNumber} comments
+              </Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
+  </MainContainer>
 };
 
 export default WelcomePage;
+
+function useStyles() {
+  return makeStyles(theme => ({
+    cardGrid: {
+      paddingTop: theme.spacing(8),
+      paddingBottom: theme.spacing(8),
+    },
+    cardContent: {
+      flexGrow: 1,
+    },
+  }))();
+}
