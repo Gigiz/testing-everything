@@ -1,24 +1,27 @@
 import faker from 'faker';
 
 export const fetchUsers = () => {
-  const users = [];
 
-  for (let i = 0; i < 1000; i++) {
-    const user = {
-      id: faker.random.uuid(),
-      name: faker.name.findName(),
-      registrationDate: faker.date.past(),
-      email: faker.internet.email(),
-      commentsNumber: faker.random.number(200),
-      profilePicture: faker.image.avatar(),
-      profileDescription: faker.random.words(30),
+  return new Promise((resolve, reject) => {
+    const users = [];
 
-    };
+    for (let i = 0; i < 1000; i++) {
+      const user = {
+        id: faker.random.uuid(),
+        name: faker.name.findName(),
+        registrationDate: faker.date.past(),
+        email: faker.internet.email(),
+        commentsNumber: faker.random.number(200),
+        profilePicture: faker.image.avatar(),
+        profileDescription: faker.random.words(30),
 
-    users.push(user);
-  }
+      };
 
-  return Promise.resolve(users);
+      users.push(user);
+    }
+
+    resolve(users);
+  });
 };
 
 export const sortUsersByCommentsNumberDescending = users => {
