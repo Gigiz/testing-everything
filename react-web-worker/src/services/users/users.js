@@ -1,26 +1,19 @@
 import faker from 'faker';
+import UsersWorker from '@src/services/users/users.worker';
+
+const usersWorker = new UsersWorker();
 
 export const fetchUsers = () => {
-
   return new Promise((resolve, reject) => {
-    const users = [];
-
-    for (let i = 0; i < 1000; i++) {
-      const user = {
-        id: faker.random.uuid(),
-        name: faker.name.findName(),
-        registrationDate: faker.date.past(),
-        email: faker.internet.email(),
-        commentsNumber: faker.random.number(200),
-        profilePicture: faker.image.avatar(),
-        profileDescription: faker.random.words(30),
-
-      };
-
-      users.push(user);
-    }
-
-    resolve(users);
+    usersWorker.onmessage = message => {
+      const { data: { action, payload } } = message;
+      if (action === 'fetchedUsers') {
+        resolve(payload);
+      } else {
+        reject();
+      }
+    };
+    usersWorker.postMessage({ action: 'fetchUsers' });
   });
 };
 

@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import * as userService from '@src/services/users/users';
+
 import MainContainer from '@src/components/MainContainer/MainContainer';
 
 const WelcomePage = () => {
@@ -22,7 +23,7 @@ const WelcomePage = () => {
 
   const fetchAllUsers = async () => {
     const users = await userService.fetchUsers();
-    setUsers(users);
+    console.log(users);
   };
 
   const sortDescendingNumberOfComments = () => {
@@ -50,23 +51,23 @@ const WelcomePage = () => {
         {users.map((user, index) => (
           <Grid item key={index} xs={12} sm={12} md={12}>
             <Card>
-            <CardHeader
-              avatar={
-                <Avatar src={user.profilePicture} className={classes.avatar} />
-              }
-              title={user.name}
-              subheader={user.registrationDate.toString()}
-            />
-            <CardContent className={classes.cardContent}>
-              <Typography>
-                {user.profileDescription}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size='small' color='primary'>
-                {user.commentsNumber} comments
+              <CardHeader
+                avatar={
+                  <Avatar src={user.profilePicture} className={classes.avatar} />
+                }
+                title={user.name}
+                subheader={user.registrationDate.toString()}
+              />
+              <CardContent className={classes.cardContent}>
+                <Typography>
+                  {user.profileDescription}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size='small' color='primary'>
+                  {user.commentsNumber} comments
               </Button>
-            </CardActions>
+              </CardActions>
             </Card>
           </Grid>
         ))}
