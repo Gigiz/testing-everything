@@ -1,9 +1,9 @@
-import faker from 'faker';
 import UsersWorker from '@src/services/users/users.worker';
 
 const usersWorker = new UsersWorker();
 
 export const fetchUsers = () => {
+
   return new Promise((resolve, reject) => {
     usersWorker.onmessage = message => {
       const { data: { action, payload } } = message;
@@ -14,6 +14,20 @@ export const fetchUsers = () => {
       }
     };
     usersWorker.postMessage({ action: 'fetchUsers' });
+  });
+};
+
+export const sortUsersByCommentsNumberAscending = users => {
+  return new Promise((resolve, reject) => {
+    usersWorker.onmessage = message => {
+      const { data: { action, payload } } = message;
+      if (action === 'sortedUsersAcending') {
+        resolve(payload);
+      } else {
+        reject();
+      }
+    };
+    usersWorker.postMessage({ action: 'sortUsersByCommentsNumberAscending', payload: users });
   });
 };
 
