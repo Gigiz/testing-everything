@@ -9,6 +9,11 @@ const ResultBox = ({ index }) => {
       const response = await fetch('https://fakerestapi.azurewebsites.net/api/Books');
       const books = await response.json();
       const book = books.find(book => book.ID === index);
+      for(let i=0; i < 10000; i++) {
+        for(let j=0; j < 1000; j++) {
+        
+        }
+      }
       setBook(book);
     };
 
@@ -25,15 +30,17 @@ const WelcomePage = () => {
   const [time, setTime] = useState(new Date());
   const [boxes, setBoxes] = useState([]);
 
+  useEffect(() => {
+    setInterval(updateTime, 1000);
+  }, []);
+
   const updateTime = () => {
     setTime(new Date());
   };
 
-  const searchPeople = () => {
+  const createResultBoxes = () => {
     setBoxes(Array.from(Array(100).keys()));
   };
-
-  setInterval(updateTime, 1000);
 
   const h = time.getHours();
   const m = time.getMinutes();
@@ -43,7 +50,7 @@ const WelcomePage = () => {
     <h1>Time: {h}:{m}:{s}</h1>
 
     <div>
-      <input type='button' value='Search' onClick={() => searchPeople()} />
+      <input type='button' value='Search' onClick={() => createResultBoxes()} />
     </div>
     <div>Result: </div>
     <div>
