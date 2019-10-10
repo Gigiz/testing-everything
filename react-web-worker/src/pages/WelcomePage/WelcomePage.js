@@ -1,104 +1,88 @@
 import React, { useState, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import CardHeader from '@material-ui/core/CardHeader';
-import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
+import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
-import * as userService from '@src/services/users/users';
-import LaunchScreen from '@src/components/LaunchScreen/LaunchScreen';
 import MainContainer from '@src/components/MainContainer/MainContainer';
 
-const WelcomePage = () => {
+const WelcomePage = ({ history }) => {
   const classes = useStyles();
-  const [isLoading, setLoading] = useState(false);
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    fetchAllUsers();
-
-    return (() => {
-      userService.stopWebWorker();
-    });
-  }, []);
-
-  const fetchAllUsers = async () => {
-    setLoading(true);
-    const users = await userService.fetchUsers();
-    setUsers(users);
-    setLoading(false);
-  };
-
-  const sortAscendingNumberOfComments = async () => {
-    const sortedUserAscending = await userService.sortUsersByCommentsNumberAscending(users);
-    setUsers(sortedUserAscending);
-  };
-
-  const sortDescendingNumberOfComments = () => {
-    const sortedUserDescending = userService.sortUsersByCommentsNumberDescending(users);
-    setUsers(sortedUserDescending);
-  };
 
   return <MainContainer>
-    <div>
-      <Grid container spacing={2} justify='center'>
-        <Grid item>
-          <Button variant='contained' color='primary' onClick={() => sortAscendingNumberOfComments()}>
-            Sort Acending Number of Comments
-          </Button>
+    <Container className={classes.cardGrid} maxWidth='md'>
+      <Grid container spacing={4}>
+        <Grid item xs={12} sm={12} md={4}>
+          <Card>
+            <CardHeader
+              title='React Web Worker'
+              subheader='2019'
+            />
+            <CardContent className={classes.cardContent}>
+              <Typography>
+                React meets Web Worker
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button size='small' color='primary' onClick={() => { history.push('/sorting-user'); }}>
+                Show me more
+              </Button>
+            </CardActions>
+          </Card>
         </Grid>
-        <Grid item>
-          <Button variant='outlined' color='primary' onClick={() => sortDescendingNumberOfComments()}>
-            Sort Descending Number of Comments
-          </Button>
+        <Grid item xs={12} sm={12} md={4}>
+          <Card>
+            <CardHeader
+              title='Todo'
+              subheader='2019'
+            />
+            <CardContent className={classes.cardContent}>
+              <Typography>
+                Todo
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button size='small' color='primary'>
+                
+              </Button>
+            </CardActions>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={12} md={4}>
+          <Card>
+            <CardHeader
+              title='Todo'
+              subheader='2019'
+            />
+            <CardContent className={classes.cardContent}>
+              <Typography>
+                Todo
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button size='small' color='primary'>
+                
+              </Button>
+            </CardActions>
+          </Card>
         </Grid>
       </Grid>
-    </div>
-    <Container className={classes.cardGrid} maxWidth="md">
-      {isLoading && <LaunchScreen />}
-      {!isLoading && <Grid container spacing={4}>
-        {users.slice(0, 20).map((user, index) => (
-          <Grid item key={index} xs={12} sm={12} md={12}>
-            <Card>
-              <CardHeader
-                avatar={
-                  <Avatar src={user.profilePicture} className={classes.avatar} />
-                }
-                title={user.name}
-                subheader={user.registrationDate.toString()}
-              />
-              <CardContent className={classes.cardContent}>
-                <Typography>
-                  {user.profileDescription}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size='small' color='primary'>
-                  {user.commentsNumber} comments
-              </Button>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>}
     </Container>
   </MainContainer>
 };
 
-export default WelcomePage;
+export default withRouter(WelcomePage);
 
 function useStyles() {
   return makeStyles(theme => ({
     cardGrid: {
       paddingTop: theme.spacing(8),
       paddingBottom: theme.spacing(8),
-    },
-    cardContent: {
-      flexGrow: 1,
     },
   }))();
 }
