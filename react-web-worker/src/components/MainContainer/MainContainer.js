@@ -21,6 +21,7 @@ function useStyles() {
       display: 'flex',
       flexDirection: 'column',
       marginTop: theme.spacing(2),
+      overflowX: 'hidden',
     },
     root: {
       flexGrow: 1,

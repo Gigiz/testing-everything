@@ -20,6 +20,10 @@ const WelcomePage = () => {
 
   useEffect(() => {
     fetchAllUsers();
+
+    return (() => {
+      userService.stopWebWorker();
+    });
   }, []);
 
   const fetchAllUsers = async () => {

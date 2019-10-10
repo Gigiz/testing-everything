@@ -6,7 +6,7 @@ self.addEventListener('message', (message) => {
   switch (action) {
     case 'fetchUsers':
       const users = [];
-      for (let i = 0; i < 20000; i++) {
+      for (let i = 0; i < 15000; i++) {
         const user = {
           id: faker.random.uuid(),
           name: faker.name.findName(),

@@ -44,3 +44,7 @@ export const sortUsersByCommentsNumberDescending = users => {
   }
   return copy;
 };
+
+export const stopWebWorker = () => {
+  usersWorker.terminate();
+};

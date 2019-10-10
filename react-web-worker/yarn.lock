@@ -1782,11 +1782,6 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
   dependencies:
     delayed-stream "~1.0.0"
 
-comlink@4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/comlink/-/comlink-4.0.4.tgz#9666560d7b59d597b4e2e822fc96c3923bd37ce3"
-  integrity sha512-ohwOM3f1H23rwckW4338kpWeODMPY2d5C5QgOk3VE98Jc//9GM78OjxaVdZ0raXhs97OH7w7Uuzrpk1n/b1V2Q==
-
 commander@2.17.x:
   version "2.17.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.17.1.tgz#bd77ab7de6de94205ceacc72f1716d29f20a77bf"
