@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Gigiz/testing-microjob#readme",
   "dependencies": {
-    "microjob": "^0.5.2"
+    "microjob": "^0.5.2",
+    "faker": "4.1.0"
   }
 }

@@ -1,15 +1,25 @@
+const faker = require('faker');
 const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
 
-const minMax = [ 0, 3333333333, 6666666666, 10000000000 ];
+function createUsers() {
+  const users = [];
+  for (let i = 0; i < 20000; i++) {
+    const user = {
+      id: faker.random.uuid(),
+      name: faker.name.findName(),
+      registrationDate: faker.date.past(),
+      email: faker.internet.email(),
+      commentsNumber: faker.random.number(200),
+      profilePicture: faker.image.avatar(),
+      profileDescription: faker.random.words(30),
 
-let count = 0;
-function bigsum(start, end) {
-  let count = 0;
-  for(let i=start; i < end; i++) {
-    count += i;
+    };
+    users.push(user);
   }
-  return count;
+  return users;
 }
+
+let usersArray = [];
 
 if (isMainThread) {
   const threadCount = 3;
@@ -20,7 +30,8 @@ if (isMainThread) {
 
   console.log(`Running with ${threadCount} threads...`);
   for (let i = 0; i < threadCount; i++) {
-    threads.add(new Worker(__filename, { workerData: { start: minMax[i], end: minMax[i+1] }}));
+    // threads.add(new Worker(__filename, { workerData: { start: minMax[i], end: minMax[i+1] }}));
+    threads.add(new Worker(__filename, { workerData: { } }));
   }
   for (let worker of threads) {
     worker.on('error', (err) => { throw err; });
@@ -29,14 +40,15 @@ if (isMainThread) {
       console.log(`Thread exiting, ${threads.size} running...`);
       if (threads.size === 0) {
         const endTime = new Date();
-        console.log(`Finish in ${endTime - startTime} ms. Res => ${count}`);
+        console.log(`Finish in ${endTime - startTime} ms. ${usersArray.length} users created`);
       }
     })
     worker.on('message', (msg) => {
-      count += msg;
+      usersArray = usersArray.concat(msg);
     });
   }
 } else {
-  const threadCount = bigsum(workerData.start, workerData.end);
-  parentPort.postMessage(threadCount);
+  // const count = bigsum(workerData.start, workerData.end);
+  const users = createUsers();
+  parentPort.postMessage(users);
 }
