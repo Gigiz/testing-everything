@@ -5,6 +5,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CopyPlugin = require('copy-webpack-plugin');
 
 const enableBundleAnalyzer = process.env.ENABLE_ANALYZER === 'true';
 
@@ -44,6 +45,9 @@ module.exports = merge(common, {
       chunkFilename: '[id].[hash:8].css'
     }),
     new ManifestPlugin(),
+    new CopyPlugin([
+      { from: './public/service-worker.js', to: './service-worker.js' },
+    ]),
     new BundleAnalyzerPlugin({
       analyzerMode: enableBundleAnalyzer === true ? 'static' : 'disabled',
       openAnalyzer: true,
