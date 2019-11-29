@@ -21,6 +21,10 @@ services:
       context: ./api
       dockerfile: Dockerfile
     image: users-sp-api:latest
+    environment:
+      - PORT=8000
+      - HEALTH_ENDPOINT=8010
+      - MONGODB_URI=mongodb://users-sp-mongo-db:27017/users-sp
     links:
       - users-sp-mongo-db
     depends_on:
