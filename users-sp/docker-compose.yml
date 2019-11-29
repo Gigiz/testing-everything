@@ -1,0 +1,39 @@
+---
+version: '3'
+
+# docker-compose -f docker-compose.yml up -d
+# docker-compose -f docker-compose.yml down -v
+
+services:
+  users-sp-mongo-db:
+    build:
+      context: ./mongo-db
+      dockerfile: Dockerfile
+    image: users-sp-mongo-db:latest
+    networks:
+      - users-sp-network
+    ports:
+      - '27017:27017'
+    hostname: users-sp-mongo-db
+
+  users-sp-api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    image: users-sp-api:latest
+    links:
+      - users-sp-mongo-db
+    depends_on:
+      - users-sp-mongo-db
+    networks:
+      - users-sp-network
+    ports:
+      - '8000:8000'
+    hostname: users-sp-api
+
+networks:
+  users-sp-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.50.0.0/16
